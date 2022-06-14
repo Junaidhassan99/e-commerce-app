@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Card from "../../components/card";
 
 const SellerSignUpScreen = () => {
@@ -92,7 +93,11 @@ const SellerSignUpScreen = () => {
                 Signup
               </button>
             </div>
-            <button className="p-3">Or Login</button>
+            <div className="p-3">
+              <Link href="/seller/login">
+                <a>Or Login</a>
+              </Link>
+            </div>
           </div>
         </Card>
       </div>

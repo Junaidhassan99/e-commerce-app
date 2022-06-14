@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Card from "../../components/card";
 
 const SellerLogInScreen = () => {
@@ -53,7 +54,11 @@ const SellerLogInScreen = () => {
                 Login
               </button>
             </div>
-            <button className="p-3">Or Signup</button>
+            <div className="p-3">
+              <Link href="/seller/signup">
+                <a>Or Signup</a>
+              </Link>
+            </div>
           </div>
         </Card>
       </div>
