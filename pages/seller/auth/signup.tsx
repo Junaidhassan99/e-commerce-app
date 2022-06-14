@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Card from "../../components/card";
+import Card from "../../../components/card";
 
 const SellerSignUpScreen = () => {
   function loginSubmitHandler(event: any) {
@@ -94,7 +94,7 @@ const SellerSignUpScreen = () => {
               </button>
             </div>
             <div className="p-3">
-              <Link href="/seller/login">
+              <Link href="/seller/auth/login">
                 <a>Or Login</a>
               </Link>
             </div>
