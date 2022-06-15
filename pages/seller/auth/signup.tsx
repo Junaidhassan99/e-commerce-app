@@ -2,10 +2,10 @@ import Link from "next/link";
 import Card from "../../../components/card";
 
 const SellerSignUpScreen = () => {
-  function loginSubmitHandler(event: any) {
+  function signupSubmitHandler(event: any) {
     event.preventDefault();
 
-    console.log("login submit");
+    console.log("Signup submit");
 
     const email = event.target.email.value;
     const password = event.target.password.value;
@@ -26,7 +26,7 @@ const SellerSignUpScreen = () => {
         <Card additionClasses="px-10">
           <div className="flex flex-col items-center">
             <div className="p-3 font-bold text-xl">Signup</div>
-            <form id="signup-form" onSubmit={loginSubmitHandler}>
+            <form id="signup-form" onSubmit={signupSubmitHandler}>
               <div className="flex flex-col p-3">
                 <label className="text-sm py-1" htmlFor="email">
                   Email
