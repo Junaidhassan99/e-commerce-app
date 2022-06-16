@@ -89,9 +89,9 @@ const SellerLogInScreen: React.FC<{
 //       console.log("connected successfully");
 //       stateData = true;
 //     })
-//     .catch(() => {
-//       console.log("connection Failed");
-//     });
+    // .catch(() => {
+    //   console.log("connection Failed");
+    // });
 
 //   const schemaTest = new mongoose.Schema({ email: String });
 

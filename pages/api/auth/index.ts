@@ -1,6 +1,19 @@
+import mongoose from "mongoose";
+import { buyerProfileModel } from "../../../mongoose_models/models";
 import { UserType } from "../../../utilities/enum";
 
-export default function handler(req: any, res: any) {
+export default async function handler(req: any, res: any) {
+  let result = "Unknown";
+
+  await mongoose
+    .connect(
+      "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/data?retryWrites=true&w=majority"
+    )
+    .then(() => (result = "Connected to MongoDB"))
+    .catch(() => {
+      result = "Failed to Connected to MongoDB";
+    });
+
   switch (req.method) {
     case "GET": {
       //enter data to be sent as response in brackets
@@ -17,8 +30,16 @@ export default function handler(req: any, res: any) {
       const data = body.data;
 
       if (userType === UserType.Buyer) {
+        //store user signup data in database
+        const createBuyerModel = await buyerProfileModel.create({ ...data });
+        await createBuyerModel.save();
+
         res.status(200).json(data);
       } else {
+        //store user signup data in database
+        const createBuyerModel = await buyerProfileModel.create({ ...data });
+        await createBuyerModel.save();
+        
         res.status(200).json(data);
       }
 
