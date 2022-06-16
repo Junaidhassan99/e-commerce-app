@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Link from "next/link";
 import Card from "../components/card";
 
@@ -29,5 +30,20 @@ const HomeScreen = () => {
     </div>
   );
 };
+
+export async function getStaticProps() {
+  await mongoose
+    .connect(
+      "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/data?retryWrites=true&w=majority"
+    )
+    .then(() => console.log("Connected to MongoDB"))
+    .catch(() => {
+      console.log("Failed to Connected to MongoDB");
+    });
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
 
 export default HomeScreen;

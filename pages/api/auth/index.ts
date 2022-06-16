@@ -6,14 +6,14 @@ import { UserType } from "../../../utilities/enum";
 export default async function handler(req: any, res: any) {
   let result = "Unknown";
 
-  await mongoose
-    .connect(
-      "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/data?retryWrites=true&w=majority"
-    )
-    .then(() => (result = "Connected to MongoDB"))
-    .catch(() => {
-      result = "Failed to Connected to MongoDB";
-    });
+  // await mongoose
+  //   .connect(
+  //     "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/data?retryWrites=true&w=majority"
+  //   )
+  //   .then(() => (result = "Connected to MongoDB"))
+  //   .catch(() => {
+  //     result = "Failed to Connected to MongoDB";
+  //   });
 
   switch (req.method) {
     case "GET": {
