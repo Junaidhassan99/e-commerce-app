@@ -1,8 +1,12 @@
+import mongoose from "mongoose";
+
 import Link from "next/link";
 import Card from "../../../components/card";
 
-const SellerLogInScreen = () => {
-  function loginSubmitHandler(event: any) {
+const SellerLogInScreen: React.FC<{
+  stateData: boolean;
+}> = ({ stateData }) => {
+  async function loginSubmitHandler(event: any) {
     event.preventDefault();
 
     console.log("login submit");
@@ -12,6 +16,13 @@ const SellerLogInScreen = () => {
 
     console.log(email);
     console.log(password);
+
+    console.log(stateData);
+
+    // const responseGet = await fetch("/api/auth");
+    // const dataGet = await responseGet.json();
+
+    // console.log(dataGet);
   }
 
   return (
@@ -65,5 +76,36 @@ const SellerLogInScreen = () => {
     </div>
   );
 };
+
+// export async function getStaticProps() {
+//   let stateData = false;
+
+//   const dbAPI =
+//     "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/?retryWrites=true&w=majority";
+
+//   await mongoose
+//     .connect(dbAPI)
+//     .then(() => {
+//       console.log("connected successfully");
+//       stateData = true;
+//     })
+//     .catch(() => {
+//       console.log("connection Failed");
+//     });
+
+//   const schemaTest = new mongoose.Schema({ email: String });
+
+//   const collectionTest = mongoose.model("collectionTest", schemaTest);
+
+//   const docTest = new collectionTest({ email: "junaid@gmail.com" });
+
+//   docTest.save();
+
+//   return {
+//     props: {
+//       stateData,
+//     },
+//   };
+// }
 
 export default SellerLogInScreen;
