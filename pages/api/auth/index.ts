@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
-import { buyerProfileModel } from "../../../mongoose_models/models";
+import {
+  buyerProfileModel,
+  sellerProfileModel,
+} from "../../../mongoose_models/models";
 import { UserType } from "../../../utilities/enum";
 
 export default async function handler(req: any, res: any) {
@@ -37,9 +40,9 @@ export default async function handler(req: any, res: any) {
         res.status(200).json(data);
       } else {
         //store user signup data in database
-        const createBuyerModel = await buyerProfileModel.create({ ...data });
-        await createBuyerModel.save();
-        
+        const createSellerModel = await sellerProfileModel.create({ ...data });
+        await createSellerModel.save();
+
         res.status(200).json(data);
       }
 

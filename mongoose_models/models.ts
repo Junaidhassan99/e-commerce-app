@@ -9,11 +9,15 @@ const buyerProfileSchema = new mongoose.Schema({
 });
 
 const sellerProfileSchema = new mongoose.Schema({
-    email: String,
-    password: String,
-    shopname: String,
-    address: String,
-    mobile: String,
-  });
+  email: String,
+  password: String,
+  shopname: String,
+  address: String,
+  mobile: String,
+});
 
 export const buyerProfileModel = mongoose.model("Buyers", buyerProfileSchema);
+export const sellerProfileModel = mongoose.model(
+  "Sellers",
+  sellerProfileSchema
+);

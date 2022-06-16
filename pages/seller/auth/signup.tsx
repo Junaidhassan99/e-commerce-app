@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Card from "../../../components/card";
+import { UserType } from "../../../utilities/enum";
 
 const SellerSignUpScreen = () => {
-  function signupSubmitHandler(event: any) {
+  async function signupSubmitHandler(event: any) {
     event.preventDefault();
 
     console.log("Signup submit");
@@ -18,6 +19,30 @@ const SellerSignUpScreen = () => {
     console.log(shopname);
     console.log(address);
     console.log(mobile);
+
+    const sellerSignupData = {
+      data: {
+        email,
+        password,
+        shopname,
+        address,
+        mobile,
+      },
+      userType: UserType.Seller,
+    };
+
+    //post signup data
+    const responsePost = await fetch("/api/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(sellerSignupData),
+    });
+
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
   }
 
   return (
