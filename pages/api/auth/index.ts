@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
-import {
-  buyerProfileModel,
-  sellerProfileModel,
-} from "../../../mongoose_models/models";
+import BuyerProfileModel from "../../../mongoose-models/buyer-profile-models";
+import SellerProfileModel from "../../../mongoose-models/seller-profile-models";
 import { UserType } from "../../../utilities/enum";
 
 export default async function handler(req: any, res: any) {
@@ -34,13 +32,13 @@ export default async function handler(req: any, res: any) {
 
       if (userType === UserType.Buyer) {
         //store user signup data in database
-        const createBuyerModel = await buyerProfileModel.create({ ...data });
+        const createBuyerModel = await BuyerProfileModel.create({ ...data });
         await createBuyerModel.save();
 
         res.status(200).json(data);
       } else {
         //store user signup data in database
-        const createSellerModel = await sellerProfileModel.create({ ...data });
+        const createSellerModel = await SellerProfileModel.create({ ...data });
         await createSellerModel.save();
 
         res.status(200).json(data);

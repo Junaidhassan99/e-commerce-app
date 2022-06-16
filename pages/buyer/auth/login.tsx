@@ -77,35 +77,4 @@ const SellerLogInScreen: React.FC<{
   );
 };
 
-// export async function getStaticProps() {
-//   let stateData = false;
-
-//   const dbAPI =
-//     "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/?retryWrites=true&w=majority";
-
-//   await mongoose
-//     .connect(dbAPI)
-//     .then(() => {
-//       console.log("connected successfully");
-//       stateData = true;
-//     })
-    // .catch(() => {
-    //   console.log("connection Failed");
-    // });
-
-//   const schemaTest = new mongoose.Schema({ email: String });
-
-//   const collectionTest = mongoose.model("collectionTest", schemaTest);
-
-//   const docTest = new collectionTest({ email: "junaid@gmail.com" });
-
-//   docTest.save();
-
-//   return {
-//     props: {
-//       stateData,
-//     },
-//   };
-// }
-
 export default SellerLogInScreen;
