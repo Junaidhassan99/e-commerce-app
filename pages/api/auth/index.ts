@@ -17,8 +17,7 @@ export default async function handler(req: any, res: any) {
 
   switch (req.method) {
     case "GET": {
-      //enter data to be sent as response in brackets
-      res.status(200).json("GET Success");
+      res.status(200).json("Nothing to show");
       break;
     }
     case "POST": {

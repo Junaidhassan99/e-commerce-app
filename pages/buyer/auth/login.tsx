@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 import Link from "next/link";
 import Card from "../../../components/card";
+import { UserType } from "../../../utilities/enum";
 
 const SellerLogInScreen: React.FC<{
   stateData: boolean;
@@ -19,10 +20,14 @@ const SellerLogInScreen: React.FC<{
 
     console.log(stateData);
 
-    // const responseGet = await fetch("/api/auth");
-    // const dataGet = await responseGet.json();
+    //post signup data
+    const responsePost = await fetch(
+      `/api/auth/${email}/${password}/${UserType.Buyer}`
+    );
 
-    // console.log(dataGet);
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
   }
 
   return (
