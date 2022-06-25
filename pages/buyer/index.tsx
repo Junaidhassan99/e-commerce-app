@@ -1,9 +1,7 @@
+import HomeComponent from "../../components/home-component";
+
 const BuyerHomeScreen = () => {
-  return (
-    <div>
-      <h1>Buyer Home</h1>
-    </div>
-  );
+  return <HomeComponent />;
 };
 
 export default BuyerHomeScreen;
