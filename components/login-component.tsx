@@ -21,20 +21,17 @@ const LogInComponent: React.FC<{
     let responsePost: any;
 
     if (userType === UserType.Buyer) {
-      const responsePost = await fetch(
+      responsePost = await fetch(
         `/api/auth?email=${email}&password=${password}&userType=${UserType.Buyer}`
       );
     } else {
-      const responsePost = await fetch(
+      responsePost = await fetch(
         `/api/auth?email=${email}&password=${password}&userType=${UserType.Seller}`
       );
     }
 
-    if (responsePost !== undefined) {
-      //test response
-      const dataPost = await responsePost.json();
-      console.log(dataPost);
-    }
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
   }
 
   return (
@@ -78,7 +75,13 @@ const LogInComponent: React.FC<{
               </button>
             </div>
             <div className="p-3">
-              <Link href="/buyer/auth/signup">
+              <Link
+                href={
+                  userType === UserType.Buyer
+                    ? "/buyer/auth/signup"
+                    : "/seller/auth/signup"
+                }
+              >
                 <a>Or Signup</a>
               </Link>
             </div>
