@@ -18,20 +18,20 @@ const LogInComponent: React.FC<{
     console.log(email);
     console.log(password);
 
-    let responsePost: any;
+    let responseGet: any;
 
     if (userType === UserType.Buyer) {
-      responsePost = await fetch(
+      responseGet = await fetch(
         `/api/auth?email=${email}&password=${password}&userType=${UserType.Buyer}`
       );
     } else {
-      responsePost = await fetch(
+      responseGet = await fetch(
         `/api/auth?email=${email}&password=${password}&userType=${UserType.Seller}`
       );
     }
 
-    const dataPost = await responsePost.json();
-    console.log(dataPost);
+    const dataGet = await responseGet.json();
+    console.log(dataGet);
   }
 
   return (
