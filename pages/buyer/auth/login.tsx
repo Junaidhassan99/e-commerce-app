@@ -21,10 +21,13 @@ const SellerLogInScreen: React.FC<{
     console.log(stateData);
 
     //post signup data
+    // const responsePost = await fetch(
+    //   `/api/auth/${email}/${password}/${UserType.Buyer}`
+    // );
+
     const responsePost = await fetch(
-      `/api/auth/${email}/${password}/${UserType.Buyer}`
+      `/api/auth?email=${email}&password=${password}&userType=${UserType.Buyer}`
     );
-    
 
     //test response
     const dataPost = await responsePost.json();

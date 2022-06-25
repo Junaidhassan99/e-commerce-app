@@ -31,20 +31,4 @@ const HomeScreen = () => {
   );
 };
 
-//note: mongoose connect will only run when choice screen is loaded
-export async function getStaticProps() {
-  await mongoose
-    .connect(
-      "mongodb+srv://junaidhassan:password000jh@cluster0.53cvgvs.mongodb.net/data?retryWrites=true&w=majority"
-    )
-    .then(() => console.log("Connected to MongoDB"))
-    .catch(() => {
-      console.log("Failed to Connected to MongoDB");
-    });
-
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-}
-
 export default HomeScreen;
