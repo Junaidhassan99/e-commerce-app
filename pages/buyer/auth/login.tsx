@@ -24,6 +24,7 @@ const SellerLogInScreen: React.FC<{
     const responsePost = await fetch(
       `/api/auth/${email}/${password}/${UserType.Buyer}`
     );
+    
 
     //test response
     const dataPost = await responsePost.json();

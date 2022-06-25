@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import BuyerProfileModel from "../../../mongoose-models/buyer-profile-models";
-import SellerProfileModel from "../../../mongoose-models/seller-profile-models";
+import BuyerProfileModel from "../../../mongoose_models/buyer-profile-models";
+import SellerProfileModel from "../../../mongoose_models/seller-profile-models";
 import { UserType } from "../../../utilities/enum";
 
 export default async function handler(req: any, res: any) {
@@ -17,6 +17,10 @@ export default async function handler(req: any, res: any) {
 
   switch (req.method) {
     case "GET": {
+      const quertData = req.query;
+
+      console.log(`Get Test: ${quertData}`);
+
       res.status(200).json("Nothing to show");
       break;
     }

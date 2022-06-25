@@ -31,6 +31,7 @@ const HomeScreen = () => {
   );
 };
 
+//note: mongoose connect will only run when choice screen is loaded
 export async function getStaticProps() {
   await mongoose
     .connect(
