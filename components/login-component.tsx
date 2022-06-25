@@ -1,12 +1,26 @@
-import mongoose from "mongoose";
-
 import Link from "next/link";
+import store, { wrapper } from "../store/store";
 import { UserType } from "../utilities/enum";
 import Card from "./card";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setAllAuthData } from "../store/auth-slice";
+import { useRouter } from "next/router";
 
 const LogInComponent: React.FC<{
   userType: UserType;
 }> = ({ userType }) => {
+  const dispatch = useDispatch();
+
+  const allAuthData = useSelector((state: any) => state.auth);
+
+  const router = useRouter();
+
+  console.log(
+    "🚀 ~ file: login-component.tsx ~ line 16 ~ allAuthData",
+    allAuthData
+  );
+
   async function loginSubmitHandler(event: any) {
     event.preventDefault();
 
@@ -31,7 +45,26 @@ const LogInComponent: React.FC<{
     }
 
     const dataGet = await responseGet.json();
-    console.log(dataGet);
+
+    console.log(
+      "🚀 ~ file: login-component.tsx ~ line 41 ~ loginSubmitHandler ~ dataGet",
+      dataGet
+    );
+
+    if (dataGet !== null && password === dataGet.password) {
+      console.log("Correct Email and Password");
+
+      //store auth data to state
+      dispatch(setAllAuthData({ userType: userType, authData: dataGet }));
+
+      if (userType === UserType.Buyer) {
+        router.push("/buyer");
+      } else {
+        router.push("/seller");
+      }
+    } else {
+      console.log("Incorrect Email or Password");
+    }
   }
 
   return (
@@ -85,6 +118,7 @@ const LogInComponent: React.FC<{
                 <a>Or Signup</a>
               </Link>
             </div>
+            {/* <div>{allAuthData.authData!==undefined&&`${allAuthData.authData.mobile}`}</div> */}
           </div>
         </Card>
       </div>
