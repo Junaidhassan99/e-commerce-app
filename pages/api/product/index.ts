@@ -25,6 +25,23 @@ export default async function handler(req: any, res: any) {
 
   switch (req.method) {
     case "GET": {
+      const quertData = req.query;
+
+      const reqEmail = quertData.reqEmail;
+
+      let responseProducts;
+      if (reqEmail === undefined) {
+        //get all objs from product collection
+        responseProducts = await ProductModel.find({});
+      } else {
+        //get only reqEmail objs from product collection
+        responseProducts = await ProductModel.find({
+          sellerEmail: reqEmail,
+        });
+      }
+
+      res.status(200).json(responseProducts);
+
       break;
     }
     case "POST": {

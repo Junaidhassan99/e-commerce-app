@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import { UserType } from "../utilities/enum";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faInfo } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faInfo, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
   Dialog,
@@ -12,6 +12,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
+import { wrapper } from "../store/store";
 
 const HomeComponent = () => {
   const allAuthData = useSelector((state: any) => state.auth);
@@ -19,6 +20,7 @@ const HomeComponent = () => {
 
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
   const [openAddProductDialog, setOpenAddProductDialog] = useState(false);
+  const [productsData, setProductsData] = useState<any[]>([]);
 
   async function addProduct(event: any) {
     event.preventDefault();
@@ -52,6 +54,30 @@ const HomeComponent = () => {
     console.log(dataPost);
   }
 
+  useEffect(() => {
+    console.log("useEffect");
+    const fetchData = async () => {
+      let responseGet: any;
+      if (userType === UserType.Buyer) {
+        responseGet = await fetch(`/api/product`);
+      } else {
+        responseGet = await fetch(
+          `/api/product?reqEmail=${allAuthData.authData.email}`
+        );
+      }
+
+      if (responseGet !== undefined) {
+        const dataGet = await responseGet.json();
+
+        console.log(dataGet);
+
+        setProductsData(dataGet);
+      }
+    };
+
+    fetchData();
+  }, [allAuthData.authData.email, userType]);
+
   return (
     <div>
       {allAuthData.authData === undefined ? (
@@ -64,16 +90,28 @@ const HomeComponent = () => {
               Seller Dashboard
             </div>
             <div className="w-full"></div>
-            <Button onClick={() => setOpenAddProductDialog(true)}>
-              <FontAwesomeIcon className="px-5" icon={faPlus} size="2x" />
-            </Button>
+            {userType !== UserType.Buyer && (
+              <Button onClick={() => setOpenAddProductDialog(true)}>
+                <FontAwesomeIcon className="px-5" icon={faPlus} size="2x" />
+              </Button>
+            )}
             <Button onClick={() => setOpenInfoDialog(true)}>
               <FontAwesomeIcon className="px-5" icon={faInfo} size="2x" />
+            </Button>
+            <Button onClick={async () => {}}>
+              <FontAwesomeIcon className="px-5" icon={faQuestion} size="2x" />
             </Button>
           </div>
 
           {/* Body */}
-          <div className="pt-24 px-[10%]"></div>
+          <div className="pt-24 px-[10%]">
+            <div>
+              {productsData.map((value) => (
+                <div key={value._id}>{value.productName}</div>
+              ))}
+              {/* {productsData[0] !== undefined && productsData[0].sellerEmail} */}
+            </div>
+          </div>
         </div>
       )}
 
