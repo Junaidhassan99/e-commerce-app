@@ -20,16 +20,31 @@ const HomeComponent = () => {
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
   const [openAddProductDialog, setOpenAddProductDialog] = useState(false);
 
-  function addProduct(event: any) {
+  async function addProduct(event: any) {
     event.preventDefault();
 
     console.log("add product submit");
 
     const productName = event.target.productName.value;
-    const price = event.target.price.value;
+    const productPrice = event.target.productPrice.value;
+    const productDescription = event.target.productDescription.value;
 
     console.log(productName);
-    console.log(price);
+    console.log(productPrice);
+    console.log(productDescription);
+
+    //post productdata
+    const responsePost = await fetch("/api/product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productName, productPrice, productDescription }),
+    });
+
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
   }
 
   return (
@@ -64,14 +79,14 @@ const HomeComponent = () => {
             <div className="font-bold">{"User Info"}</div>
           </DialogTitle>
           <DialogContent className="font-normal">
-            <div>{`Email: ${allAuthData.authData.email}`}</div>
+            <div className="py-1">{`Email: ${allAuthData.authData.email}`}</div>
             {userType === UserType.Buyer ? (
-              <div>{`Full Name: ${allAuthData.authData.fullname}`}</div>
+              <div className="py-1">{`Full Name: ${allAuthData.authData.fullname}`}</div>
             ) : (
-              <div>{`Shop Name: ${allAuthData.authData.shopname}`}</div>
+              <div className="py-1">{`Shop Name: ${allAuthData.authData.shopname}`}</div>
             )}
-            <div>{`Address: ${allAuthData.authData.address}`}</div>
-            <div>{`Contact Number: ${allAuthData.authData.mobile}`}</div>
+            <div className="py-1">{`Address: ${allAuthData.authData.address}`}</div>
+            <div className="py-1">{`Contact Number: ${allAuthData.authData.mobile}`}</div>
           </DialogContent>
           <DialogActions>
             <Button
@@ -97,7 +112,7 @@ const HomeComponent = () => {
 
           <DialogContent className="font-normal">
             <form id="add-product-form" onSubmit={addProduct}>
-              <div className="flex flex-col p-3">
+              <div className="flex flex-col py-3">
                 <label className="text-sm py-1" htmlFor="productName">
                   Product Name
                 </label>
@@ -108,16 +123,29 @@ const HomeComponent = () => {
                   className="outline-0 border-b-2 w-60"
                 ></input>
               </div>
-              <div className="flex flex-col p-3">
-                <label className="text-sm py-1" htmlFor="price">
-                  Price
+              <div className="flex flex-col py-3">
+                <label className="text-sm py-1" htmlFor="productPrice">
+                  Product Price
                 </label>
                 <input
-                  id="price"
+                  id="productPrice"
                   type="number"
                   placeholder="Type product price"
                   className="outline-0 border-b-2 w-60"
+                  step=".01"
                 ></input>
+              </div>
+
+              <div className="flex flex-col py-3">
+                <label className="text-sm py-1" htmlFor="productDescription">
+                  Product Description
+                </label>
+                <textarea
+                  id="productDescription"
+                  name="text"
+                  placeholder="Type product description"
+                  className="outline-0 border-b-2 w-60"
+                ></textarea>
               </div>
             </form>
           </DialogContent>
