@@ -1,11 +1,12 @@
 import { useSelector } from "react-redux";
 import { UserType } from "../utilities/enum";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faInfo, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
+  Card,
   Dialog,
   DialogActions,
   DialogContent,
@@ -21,6 +22,25 @@ const HomeComponent = () => {
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
   const [openAddProductDialog, setOpenAddProductDialog] = useState(false);
   const [productsData, setProductsData] = useState<any[]>([]);
+
+  const fetchProductsData = useCallback(async () => {
+    let responseGet: any;
+    if (userType === UserType.Buyer) {
+      responseGet = await fetch(`/api/product`);
+    } else {
+      responseGet = await fetch(
+        `/api/product?reqEmail=${allAuthData.authData.email}`
+      );
+    }
+
+    if (responseGet !== undefined) {
+      const dataGet = await responseGet.json();
+
+      console.log(dataGet);
+
+      setProductsData(dataGet);
+    }
+  }, [allAuthData.authData.email, userType]);
 
   async function addProduct(event: any) {
     event.preventDefault();
@@ -52,31 +72,17 @@ const HomeComponent = () => {
     //test response
     const dataPost = await responsePost.json();
     console.log(dataPost);
+
+    fetchProductsData();
+
+    setOpenAddProductDialog(false);
   }
 
   useEffect(() => {
     console.log("useEffect");
-    const fetchData = async () => {
-      let responseGet: any;
-      if (userType === UserType.Buyer) {
-        responseGet = await fetch(`/api/product`);
-      } else {
-        responseGet = await fetch(
-          `/api/product?reqEmail=${allAuthData.authData.email}`
-        );
-      }
 
-      if (responseGet !== undefined) {
-        const dataGet = await responseGet.json();
-
-        console.log(dataGet);
-
-        setProductsData(dataGet);
-      }
-    };
-
-    fetchData();
-  }, [allAuthData.authData.email, userType]);
+    fetchProductsData();
+  }, [fetchProductsData]);
 
   return (
     <div>
@@ -105,9 +111,23 @@ const HomeComponent = () => {
 
           {/* Body */}
           <div className="pt-24 px-[10%]">
-            <div>
+            <div className="flex flex-row flex-wrap">
               {productsData.map((value) => (
-                <div key={value._id}>{value.productName}</div>
+                <div key={value._id} className="w-1/4 p-2">
+                  <Card>
+                    <div className="flex flex-col py-2 px-4">
+                      <div className="text-4xl font-semibold">
+                        {value.productName}
+                      </div>
+                      <div className="text-2xl">{`$${value.productPrice}`}</div>
+                      <div className="lg">{value.productDescription}</div>
+                      <div className="lg text-slate-500">
+                        {value.sellerEmail}
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+                // <div key={value._id}>{value.productName}</div>
               ))}
               {/* {productsData[0] !== undefined && productsData[0].sellerEmail} */}
             </div>
