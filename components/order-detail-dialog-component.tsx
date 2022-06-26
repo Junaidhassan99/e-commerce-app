@@ -4,6 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
 } from "@material-ui/core";
 
 const OrderDetailDialogComponent: React.FC<{
@@ -25,22 +26,23 @@ const OrderDetailDialogComponent: React.FC<{
         </DialogTitle>
         <DialogContent className="font-normal">
           <div className="pr-16">
-            <div className="flex flex-row">
+            <div className="flex flex-row py-2">
               <div className="px-4 w-1/4 font-semibold">{"Name"}</div>
               <div className="px-4 w-1/4 font-semibold">{"Price"}</div>
               <div className="px-4 w-1/4 font-semibold">{"Quantity"}</div>
               <div className="px-4 w-1/4 font-semibold">{"Email"}</div>
             </div>
+            <Divider className="w-full" />
             {ordersData.map((item) => {
               return (
                 <div key={item._id}>
-                  <div className="flex flex-row">
+                  <div className="flex flex-row py-2">
                     <div className="px-4 w-1/4">{item.productName}</div>
                     <div className="px-4 w-1/4">{item.productPrice}</div>
                     <div className="px-4 w-1/4">x{item.quantity}</div>
                     <div className="px-4 w-1/4">{item.buyerEmail}</div>
                   </div>
-                  {/* <Divider className="w-full"/> */}
+                  <Divider className="w-full" />
                 </div>
               );
             })}
@@ -52,7 +54,7 @@ const OrderDetailDialogComponent: React.FC<{
             color="primary"
             autoFocus
           >
-            Close
+            <div className="text-red-600">Close</div>
           </Button>
         </DialogActions>
       </div>

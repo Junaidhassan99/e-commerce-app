@@ -72,7 +72,9 @@ const LogInComponent: React.FC<{
       <div className="grid place-items-center h-screen">
         <Card additionClasses="px-10">
           <div className="flex flex-col items-center">
-            <div className="p-3 font-bold text-xl">Login</div>
+            <div className="p-3 font-bold text-2xl">
+              Login As {userType === UserType.Buyer ? "Buyer" : "Seller"}.
+            </div>
             <form id="login-form" onSubmit={loginSubmitHandler}>
               <div className="flex flex-col p-3">
                 <label className="text-sm py-1" htmlFor="email">
@@ -102,7 +104,7 @@ const LogInComponent: React.FC<{
                 type="submit"
                 form="login-form"
                 value="Submit"
-                className="primary-color py-1 px-24 rounded-lg"
+                className="primary-color py-1 px-24 rounded-lg text-slate-50 text-lg"
               >
                 Login
               </button>

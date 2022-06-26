@@ -152,6 +152,7 @@ const AddAndEditDialogComponent: React.FC<{
             value="Submit"
             color="primary"
             autoFocus
+            className="bg-red-600"
           >
             Save
           </Button>
@@ -160,7 +161,7 @@ const AddAndEditDialogComponent: React.FC<{
             color="primary"
             autoFocus
           >
-            Close
+            <div className="text-red-600">Close</div>
           </Button>
         </DialogActions>
       </div>

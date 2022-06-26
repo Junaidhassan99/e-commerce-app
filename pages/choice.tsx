@@ -8,10 +8,10 @@ const HomeScreen = () => {
       <div className="grid place-items-center h-screen">
         <Card additionClasses="px-10">
           <div className="flex flex-col items-center">
-            <div className="p-3 font-bold text-xl">Login As</div>
+            <div className="p-3 font-bold text-2xl">Login As</div>
             <div className="p-3">
               <Link href="/buyer/auth/login">
-                <button className="primary-color py-1 px-24 rounded-lg">
+                <button className="primary-color py-1 px-24 rounded-lg text-slate-50 text-lg">
                   <a>Buyer</a>
                 </button>
               </Link>
@@ -19,7 +19,7 @@ const HomeScreen = () => {
             <div className="p-3">- Or -</div>
             <div className="p-3">
               <Link href="/seller/auth/login">
-                <button className="primary-color py-1 px-24 rounded-lg">
+                <button className="primary-color py-1 px-24 rounded-lg text-slate-50 text-lg">
                   <a>Seller</a>
                 </button>
               </Link>

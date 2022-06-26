@@ -94,20 +94,29 @@ const HomeComponent = () => {
       ) : (
         <div className="flex flex-col">
           {/* App Bar */}
-          <div className="bg-red-700 h-16 w-full px-[10%] fixed flex flex-row items-center">
-            <div className="text-4xl font-bold whitespace-nowrap">
-              Seller Dashboard
+          <div className="bg-red-700 h-16 w-full px-[10%] fixed flex flex-row items-center z-10">
+            <div className="text-4xl font-bold whitespace-nowrap text-slate-100">
+              {userType === UserType.Buyer
+                ? "Buyer Dashboard"
+                : "Seller Dashboard"}
             </div>
             <div className="w-full"></div>
-            <Button
-              onClick={() => {
-                console.log("inside");
-                fetchOrdersData();
-                setOpenViewOrderDialog(true);
-              }}
-            >
-              <FontAwesomeIcon className="px-5" icon={faAngleDown} size="2x" />
-            </Button>
+            {userType !== UserType.Buyer && (
+              <Button
+                onClick={() => {
+                  console.log("inside");
+                  fetchOrdersData();
+                  setOpenViewOrderDialog(true);
+                }}
+              >
+                <FontAwesomeIcon
+                  className="px-5"
+                  icon={faAngleDown}
+                  size="2x"
+                  color="white"
+                />
+              </Button>
+            )}
             {userType !== UserType.Buyer && (
               <Button
                 onClick={() => {
@@ -121,19 +130,34 @@ const HomeComponent = () => {
                   setOpenAddProductDialog({ isOpen: true, isEdit: false });
                 }}
               >
-                <FontAwesomeIcon className="px-5" icon={faPlus} size="2x" />
+                <FontAwesomeIcon
+                  className="px-5"
+                  icon={faPlus}
+                  size="2x"
+                  color="white"
+                />
               </Button>
             )}
             <Button onClick={() => setOpenInfoDialog(true)}>
-              <FontAwesomeIcon className="px-5" icon={faInfo} size="2x" />
+              <FontAwesomeIcon
+                className="px-5"
+                icon={faInfo}
+                size="2x"
+                color="white"
+              />
             </Button>
             <Button onClick={async () => {}}>
-              <FontAwesomeIcon className="px-5" icon={faQuestion} size="2x" />
+              <FontAwesomeIcon
+                className="px-5"
+                icon={faQuestion}
+                size="2x"
+                color="white"
+              />
             </Button>
           </div>
 
           {/* Body */}
-          <div className="pt-24 px-[10%]">
+          <div className="py-24 px-[10%]">
             <div className="flex flex-row flex-wrap">
               {productsData.map((value) => {
                 return (

@@ -67,7 +67,9 @@ const SignUpComponent: React.FC<{
       <div className="grid place-items-center h-screen">
         <Card additionClasses="px-10">
           <div className="flex flex-col items-center">
-            <div className="p-3 font-bold text-xl">Signup</div>
+            <div className="p-3 font-bold text-2xl">
+              Signup As {userType === UserType.Buyer ? "Buyer" : "Seller"}.
+            </div>
             <form id="signup-form" onSubmit={signupSubmitHandler}>
               <div className="flex flex-col p-3">
                 <label className="text-sm py-1" htmlFor="email">
@@ -132,7 +134,7 @@ const SignUpComponent: React.FC<{
                 type="submit"
                 form="signup-form"
                 value="Submit"
-                className="primary-color py-1 px-24 rounded-lg"
+                className="primary-color py-1 px-24 rounded-lg text-slate-50 text-lg"
               >
                 Signup
               </button>

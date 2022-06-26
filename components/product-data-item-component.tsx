@@ -69,24 +69,24 @@ const ProductDataItemComponent: React.FC<{
 
   return (
     <Card>
-      <div className="flex flex-col">
-        <div className="text-4xl font-semibold">{value.productName}</div>
-        <div className="text-2xl">{`$${value.productPrice}`}</div>
-        <div className="lg">{value.productDescription}</div>
-        <div className="lg text-slate-500">{value.sellerEmail}</div>
+      <div className="flex flex-col h-60 overflow-y-scroll">
+        <div className="text-4xl font-semibold py-1">{value.productName}</div>
+        <div className="text-2xl py-1">{`$${value.productPrice}`}</div>
+        <div className="lg py-1">{value.productDescription}</div>
+        <div className="lg text-slate-500 py-1">{value.sellerEmail}</div>
         {userType === UserType.Buyer ? (
-          <div className="flex flex-col ">
-            <div className="w-1/2">
-              <input
-                defaultValue={0}
-                type="number"
-                placeholder="Quantity"
-                className="w-14 border-2"
-                onChange={(newVal) => {
-                  productOrderQuanity = Number(newVal.target.value);
-                }}
-              />
-            </div>
+          <div className="flex flex-col py-1 items-center h-full">
+            <input
+              defaultValue={1}
+              type="number"
+              placeholder="Quantity"
+              className="w-1/2 border-2 text-center"
+              min={1}
+              onChange={(newVal) => {
+                productOrderQuanity = Number(newVal.target.value);
+              }}
+            />
+
             <div className="flex flex-row justify-evenly items-center">
               <Button
                 onClick={(event) => {
@@ -104,14 +104,16 @@ const ProductDataItemComponent: React.FC<{
             </div>
           </div>
         ) : (
-          <div className="flex flex-row justify-evenly items-center">
+          <div className="flex flex-row justify-evenly items-center py-1 self-end h-full">
             <Button
               onClick={(event) => {
                 setAddProductFormValuesFunction();
                 setOpenAddProductDialogFunction();
               }}
             >
-              <div className="bg-red-600 px-5 py-1 rounded-lg">Update</div>
+              <div className="bg-red-600 px-5 py-1 rounded-lg text-slate-100">
+                Update
+              </div>
             </Button>
             <Button
               onClick={() => {
@@ -119,7 +121,9 @@ const ProductDataItemComponent: React.FC<{
                 deleteProduct(value._id);
               }}
             >
-              <div className="bg-red-600 px-5 py-1 rounded-lg">Delete</div>
+              <div className="bg-red-600 px-5 py-1 rounded-lg text-slate-100">
+                Delete
+              </div>
             </Button>
           </div>
         )}

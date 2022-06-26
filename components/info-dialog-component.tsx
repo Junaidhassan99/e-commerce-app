@@ -37,8 +37,12 @@ const InfoDialogComponent: React.FC<{
           <div className="py-1">{`Contact Number: ${authData.mobile}`}</div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={setOpenInfoDialogFunction} color="primary" autoFocus>
-            Close
+          <Button
+            onClick={setOpenInfoDialogFunction}
+            // color="primary"
+            autoFocus
+          >
+            <div className="text-red-600">Close</div>
           </Button>
         </DialogActions>
       </div>
