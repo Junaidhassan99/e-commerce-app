@@ -20,6 +20,9 @@ import {
 } from "@material-ui/core";
 import { wrapper } from "../store/store";
 import Card from "./card";
+import InfoDialogComponent from "./info-dialog-component";
+import OrderDetailDialogComponent from "./order-detail-dialog-component";
+import AddAndEditDialogComponent from "./add-and-edit-dialog-component";
 
 const HomeComponent = () => {
   const allAuthData = useSelector((state: any) => state.auth);
@@ -335,160 +338,33 @@ const HomeComponent = () => {
       )}
 
       {/* View Order Dialog */}
-      <Dialog
-        open={openViewOrderDialog}
-        onClose={() => setOpenViewOrderDialog(false)}
-      >
-        <div className="px-3">
-          <DialogTitle>
-            <div className="font-bold">{"View Orders"}</div>
-          </DialogTitle>
-          <DialogContent className="font-normal">
-            <div className="pr-16">
-              <div className="flex flex-row">
-                <div className="px-4 w-1/4 font-semibold">{"Name"}</div>
-                <div className="px-4 w-1/4 font-semibold">{"Price"}</div>
-                <div className="px-4 w-1/4 font-semibold">{"Quantity"}</div>
-                <div className="px-4 w-1/4 font-semibold">{"Email"}</div>
-              </div>
-              {ordersData.map((item) => {
-                return (
-                  <div key={item._id}>
-                    <div className="flex flex-row">
-                      <div className="px-4 w-1/4">{item.productName}</div>
-                      <div className="px-4 w-1/4">{item.productPrice}</div>
-                      <div className="px-4 w-1/4">x{item.quantity}</div>
-                      <div className="px-4 w-1/4">{item.buyerEmail}</div>
-                    </div>
-                    {/* <Divider className="w-full"/> */}
-                  </div>
-                );
-              })}
-            </div>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => setOpenViewOrderDialog(false)}
-              color="primary"
-              autoFocus
-            >
-              Close
-            </Button>
-          </DialogActions>
-        </div>
-      </Dialog>
+      <OrderDetailDialogComponent
+        openViewOrderDialog={openViewOrderDialog}
+        ordersData={ordersData}
+        setOpenViewOrderDialogFunction={() => setOpenViewOrderDialog(false)}
+      />
 
       {/* Info Dialog */}
-      <Dialog open={openInfoDialog} onClose={() => setOpenInfoDialog(false)}>
-        <div className="px-3">
-          <DialogTitle>
-            <div className="font-bold">{"User Info"}</div>
-          </DialogTitle>
-          <DialogContent className="font-normal">
-            <div className="py-1">{`Email: ${allAuthData.authData.email}`}</div>
-            {userType === UserType.Buyer ? (
-              <div className="py-1">{`Full Name: ${allAuthData.authData.fullname}`}</div>
-            ) : (
-              <div className="py-1">{`Shop Name: ${allAuthData.authData.shopname}`}</div>
-            )}
-            <div className="py-1">{`Address: ${allAuthData.authData.address}`}</div>
-            <div className="py-1">{`Contact Number: ${allAuthData.authData.mobile}`}</div>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => setOpenInfoDialog(false)}
-              color="primary"
-              autoFocus
-            >
-              Close
-            </Button>
-          </DialogActions>
-        </div>
-      </Dialog>
+      <InfoDialogComponent
+        openInfoDialog={openInfoDialog}
+        authData={allAuthData.authData}
+        userType={userType}
+        setOpenInfoDialogFunction={() => {
+          setOpenInfoDialog(false);
+        }}
+      />
 
       {/* Add Product Dialog */}
-      <Dialog
-        open={openAddProductDialog.isOpen}
-        onClose={() =>
+      <AddAndEditDialogComponent
+        openAddProductDialog={openAddProductDialog}
+        addProductFormValues={addProductFormValues}
+        onSubmitFormFunction={(event: any) =>
+          openAddProductDialog.isEdit ? updateProduct(event) : addProduct(event)
+        }
+        setOpenAddProductDialogFunction={() =>
           setOpenAddProductDialog({ isOpen: false, isEdit: false })
         }
-      >
-        <div className="px-3">
-          <DialogTitle>
-            <div className="font-bold">{"Add Product"}</div>
-          </DialogTitle>
-
-          <DialogContent className="font-normal">
-            <form
-              id="add-product-form"
-              onSubmit={(event) =>
-                openAddProductDialog.isEdit
-                  ? updateProduct(event)
-                  : addProduct(event)
-              }
-            >
-              <div className="flex flex-col py-3">
-                <label className="text-sm py-1" htmlFor="productName">
-                  Product Name
-                </label>
-                <input
-                  defaultValue={addProductFormValues.productName}
-                  id="productName"
-                  type="text"
-                  placeholder="Type your product name"
-                  className="outline-0 border-b-2 w-60"
-                ></input>
-              </div>
-              <div className="flex flex-col py-3">
-                <label className="text-sm py-1" htmlFor="productPrice">
-                  Product Price
-                </label>
-                <input
-                  defaultValue={addProductFormValues.productPrice}
-                  id="productPrice"
-                  type="number"
-                  placeholder="Type product price"
-                  className="outline-0 border-b-2 w-60"
-                  step=".01"
-                ></input>
-              </div>
-
-              <div className="flex flex-col py-3">
-                <label className="text-sm py-1" htmlFor="productDescription">
-                  Product Description
-                </label>
-                <textarea
-                  defaultValue={addProductFormValues.productDescription}
-                  id="productDescription"
-                  name="text"
-                  placeholder="Type product description"
-                  className="outline-0 border-b-2 w-60"
-                ></textarea>
-              </div>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              type="submit"
-              form="add-product-form"
-              value="Submit"
-              color="primary"
-              autoFocus
-            >
-              Save
-            </Button>
-            <Button
-              onClick={() =>
-                setOpenAddProductDialog({ isOpen: false, isEdit: false })
-              }
-              color="primary"
-              autoFocus
-            >
-              Close
-            </Button>
-          </DialogActions>
-        </div>
-      </Dialog>
+      />
     </div>
   );
 };
