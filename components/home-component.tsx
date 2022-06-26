@@ -39,7 +39,12 @@ const HomeComponent = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ productName, productPrice, productDescription }),
+      body: JSON.stringify({
+        productName,
+        productPrice,
+        productDescription,
+        sellerEmail: allAuthData.authData.email,
+      }),
     });
 
     //test response
