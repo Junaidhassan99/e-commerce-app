@@ -28,10 +28,21 @@ export default async function handler(req: any, res: any) {
       const quertData = req.query;
 
       const reqEmail = quertData.reqEmail;
+      const userType = quertData.userType;
 
-      const responseProducts = await orderModel.find({
-        sellerEmail: reqEmail,
-      });
+      let responseProducts;
+      if (userType === "0") {
+        console.log("In Buyer");
+        //buyer
+        responseProducts = await orderModel.find({
+          buyerEmail: reqEmail,
+        });
+      } else {
+        //seller
+        responseProducts = await orderModel.find({
+          sellerEmail: reqEmail,
+        });
+      }
 
       res.status(200).json(responseProducts);
       break;

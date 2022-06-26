@@ -8,6 +8,7 @@ import {
   faInfo,
   faQuestion,
   faAngleDown,
+  faAngleUp,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
@@ -69,7 +70,7 @@ const HomeComponent = () => {
 
     //It is only for sellers
     const responseGet = await fetch(
-      `/api/order?reqEmail=${allAuthData.authData.email}`
+      `/api/order?reqEmail=${allAuthData.authData.email}&userType=${userType}`
     );
 
     if (responseGet !== undefined) {
@@ -79,7 +80,7 @@ const HomeComponent = () => {
 
       setOrdersData(dataGet);
     }
-  }, [allAuthData.authData.email]);
+  }, [allAuthData.authData.email, userType]);
 
   useEffect(() => {
     console.log("useEffect");
@@ -101,7 +102,22 @@ const HomeComponent = () => {
                 : "Seller Dashboard"}
             </div>
             <div className="w-full"></div>
-            {userType !== UserType.Buyer && (
+            {userType === UserType.Buyer ? (
+              <Button
+                onClick={() => {
+                  console.log("inside");
+                  fetchOrdersData();
+                  setOpenViewOrderDialog(true);
+                }}
+              >
+                <FontAwesomeIcon
+                  className="px-5"
+                  icon={faAngleUp}
+                  size="2x"
+                  color="white"
+                />
+              </Button>
+            ) : (
               <Button
                 onClick={() => {
                   console.log("inside");
@@ -194,6 +210,7 @@ const HomeComponent = () => {
       <OrderDetailDialogComponent
         openViewOrderDialog={openViewOrderDialog}
         ordersData={ordersData}
+        userType={userType}
         setOpenViewOrderDialogFunction={() => setOpenViewOrderDialog(false)}
       />
 
