@@ -25,6 +25,15 @@ export default async function handler(req: any, res: any) {
 
   switch (req.method) {
     case "GET": {
+      const quertData = req.query;
+
+      const reqEmail = quertData.reqEmail;
+
+      const responseProducts = await orderModel.find({
+        sellerEmail: reqEmail,
+      });
+
+      res.status(200).json(responseProducts);
       break;
     }
     case "POST": {

@@ -3,7 +3,12 @@ import { UserType } from "../utilities/enum";
 import { useCallback, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faInfo, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faInfo,
+  faQuestion,
+  faAngleDown,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
   Dialog,
@@ -11,6 +16,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
 } from "@material-ui/core";
 import { wrapper } from "../store/store";
 import Card from "./card";
@@ -20,11 +26,14 @@ const HomeComponent = () => {
   const userType = allAuthData.userType;
 
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
+  const [openViewOrderDialog, setOpenViewOrderDialog] = useState(false);
   const [openAddProductDialog, setOpenAddProductDialog] = useState({
     isOpen: false,
     isEdit: false,
   });
   const [productsData, setProductsData] = useState<any[]>([]);
+  const [ordersData, setOrdersData] = useState<any[]>([]);
+
   const [addProductFormValues, setAddProductFormValues] = useState({
     productName: "",
     productPrice: 0,
@@ -50,6 +59,23 @@ const HomeComponent = () => {
       setProductsData(dataGet);
     }
   }, [allAuthData.authData.email, userType]);
+
+  const fetchOrdersData: any = useCallback(async () => {
+    console.log("fetch order data fn");
+
+    //It is only for sellers
+    const responseGet = await fetch(
+      `/api/order?reqEmail=${allAuthData.authData.email}`
+    );
+
+    if (responseGet !== undefined) {
+      const dataGet = await responseGet.json();
+
+      console.log(dataGet);
+
+      setOrdersData(dataGet);
+    }
+  }, [allAuthData.authData.email]);
 
   async function addProduct(event: any) {
     event.preventDefault();
@@ -182,6 +208,15 @@ const HomeComponent = () => {
               Seller Dashboard
             </div>
             <div className="w-full"></div>
+            <Button
+              onClick={() => {
+                console.log("inside");
+                fetchOrdersData();
+                setOpenViewOrderDialog(true);
+              }}
+            >
+              <FontAwesomeIcon className="px-5" icon={faAngleDown} size="2x" />
+            </Button>
             {userType !== UserType.Buyer && (
               <Button
                 onClick={() => {
@@ -298,6 +333,50 @@ const HomeComponent = () => {
           </div>
         </div>
       )}
+
+      {/* View Order Dialog */}
+      <Dialog
+        open={openViewOrderDialog}
+        onClose={() => setOpenViewOrderDialog(false)}
+      >
+        <div className="px-3">
+          <DialogTitle>
+            <div className="font-bold">{"View Orders"}</div>
+          </DialogTitle>
+          <DialogContent className="font-normal">
+            <div className="pr-16">
+              <div className="flex flex-row">
+                <div className="px-4 w-1/4 font-semibold">{"Name"}</div>
+                <div className="px-4 w-1/4 font-semibold">{"Price"}</div>
+                <div className="px-4 w-1/4 font-semibold">{"Quantity"}</div>
+                <div className="px-4 w-1/4 font-semibold">{"Email"}</div>
+              </div>
+              {ordersData.map((item) => {
+                return (
+                  <div key={item._id}>
+                    <div className="flex flex-row">
+                      <div className="px-4 w-1/4">{item.productName}</div>
+                      <div className="px-4 w-1/4">{item.productPrice}</div>
+                      <div className="px-4 w-1/4">x{item.quantity}</div>
+                      <div className="px-4 w-1/4">{item.buyerEmail}</div>
+                    </div>
+                    {/* <Divider className="w-full"/> */}
+                  </div>
+                );
+              })}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setOpenViewOrderDialog(false)}
+              color="primary"
+              autoFocus
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </div>
+      </Dialog>
 
       {/* Info Dialog */}
       <Dialog open={openInfoDialog} onClose={() => setOpenInfoDialog(false)}>
