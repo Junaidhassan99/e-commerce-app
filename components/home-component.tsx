@@ -137,6 +137,33 @@ const HomeComponent = () => {
     fetchProductsData();
   }
 
+  async function orderProduct(
+    productName: any,
+    productPrice: any,
+    quantity: any,
+    sellerEmail: any,
+    buyerEmail: any
+  ) {
+    //order product data
+    const responsePost = await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productName,
+        productPrice,
+        quantity,
+        sellerEmail,
+        buyerEmail,
+      }),
+    });
+
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
+  }
+
   useEffect(() => {
     console.log("useEffect");
 
@@ -182,72 +209,91 @@ const HomeComponent = () => {
           {/* Body */}
           <div className="pt-24 px-[10%]">
             <div className="flex flex-row flex-wrap">
-              {productsData.map((value) => (
-                <div key={value._id} className="w-1/4 p-2">
-                  <Card>
-                    <div className="flex flex-col">
-                      <div className="text-4xl font-semibold">
-                        {value.productName}
-                      </div>
-                      <div className="text-2xl">{`$${value.productPrice}`}</div>
-                      <div className="lg">{value.productDescription}</div>
-                      <div className="lg text-slate-500">
-                        {value.sellerEmail}
-                      </div>
-                      {userType === UserType.Buyer ? (
-                        <div className="flex flex-col ">
-                          <div className="w-1/2">
-                            <input
-                              type="number"
-                              placeholder="Quantity"
-                              className="w-14 border-2"
-                            />
+              {productsData.map((value) => {
+                let productOrderQuanity = 0;
+                return (
+                  <div key={value._id} className="w-1/4 p-2">
+                    <Card>
+                      <div className="flex flex-col">
+                        <div className="text-4xl font-semibold">
+                          {value.productName}
+                        </div>
+                        <div className="text-2xl">{`$${value.productPrice}`}</div>
+                        <div className="lg">{value.productDescription}</div>
+                        <div className="lg text-slate-500">
+                          {value.sellerEmail}
+                        </div>
+                        {userType === UserType.Buyer ? (
+                          <div className="flex flex-col ">
+                            <div className="w-1/2">
+                              <input
+                                defaultValue={0}
+                                type="number"
+                                placeholder="Quantity"
+                                className="w-14 border-2"
+                                onChange={(newVal) => {
+                                  productOrderQuanity = Number(
+                                    newVal.target.value
+                                  );
+                                }}
+                              />
+                            </div>
+                            <div className="flex flex-row justify-evenly items-center">
+                              <Button
+                                onClick={(event) => {
+                                  orderProduct(
+                                    value.productName,
+                                    value.productPrice,
+                                    productOrderQuanity,
+                                    value.sellerEmail,
+                                    allAuthData.authData.email
+                                  );
+                                }}
+                              >
+                                <div className="bg-red-600 px-5 py-1 rounded-lg">
+                                  Order Now
+                                </div>
+                              </Button>
+                            </div>
                           </div>
+                        ) : (
                           <div className="flex flex-row justify-evenly items-center">
-                            <Button onClick={(event) => {}}>
+                            <Button
+                              onClick={(event) => {
+                                setAddProductFormValues({
+                                  productName: value.productName,
+                                  productPrice: value.productPrice,
+                                  productDescription: value.productDescription,
+                                  productId: value._id,
+                                });
+
+                                setOpenAddProductDialog({
+                                  isOpen: true,
+                                  isEdit: true,
+                                });
+                              }}
+                            >
                               <div className="bg-red-600 px-5 py-1 rounded-lg">
-                                Order Now
+                                Update
+                              </div>
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                //value._id
+                                deleteProduct(value._id);
+                              }}
+                            >
+                              <div className="bg-red-600 px-5 py-1 rounded-lg">
+                                Delete
                               </div>
                             </Button>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="flex flex-row justify-evenly items-center">
-                          <Button
-                            onClick={(event) => {
-                              setAddProductFormValues({
-                                productName: value.productName,
-                                productPrice: value.productPrice,
-                                productDescription: value.productDescription,
-                                productId: value._id,
-                              });
-
-                              setOpenAddProductDialog({
-                                isOpen: true,
-                                isEdit: true,
-                              });
-                            }}
-                          >
-                            <div className="bg-red-600 px-5 py-1 rounded-lg">
-                              Update
-                            </div>
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              //value._id
-                              deleteProduct(value._id);
-                            }}
-                          >
-                            <div className="bg-red-600 px-5 py-1 rounded-lg">
-                              Delete
-                            </div>
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                </div>
-              ))}
+                        )}
+                      </div>
+                    </Card>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
