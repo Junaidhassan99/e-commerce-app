@@ -57,6 +57,44 @@ export default async function handler(req: any, res: any) {
 
       break;
     }
+    case "PUT": {
+      const data = req.body;
+
+      console.log(`Put data: ${data.productName}`);
+      console.log(`Put data: ${data.productPrice}`);
+      console.log(`Put data: ${data.productDescription}`);
+      console.log(`Put data: ${data.productId}`);
+      console.log(`Put data: ${data.sellerEmail}`);
+
+      const responseUpdate = await ProductModel.findOneAndUpdate(
+        { _id: data.productId },
+        {
+          productName: data.productName,
+          productPrice: data.productPrice,
+          productDescription: data.productDescription,
+        },
+        {
+          new: true,
+        }
+      );
+
+      res.status(200).json(responseUpdate);
+
+      break;
+    }
+    case "DELETE": {
+      const data = req.body;
+
+      console.log(`Delete Id: ${data.productId}`);
+
+      const responseDelete: any = await ProductModel.findOneAndRemove({
+        _id: data.productId,
+      });
+
+      res.status(200).json(responseDelete);
+
+      break;
+    }
     default: {
       res.status(404).json("Req Not Found");
       break;

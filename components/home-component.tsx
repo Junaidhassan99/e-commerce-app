@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faInfo, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
-  Card,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,14 +13,24 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { wrapper } from "../store/store";
+import Card from "./card";
 
 const HomeComponent = () => {
   const allAuthData = useSelector((state: any) => state.auth);
   const userType = allAuthData.userType;
 
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
-  const [openAddProductDialog, setOpenAddProductDialog] = useState(false);
+  const [openAddProductDialog, setOpenAddProductDialog] = useState({
+    isOpen: false,
+    isEdit: false,
+  });
   const [productsData, setProductsData] = useState<any[]>([]);
+  const [addProductFormValues, setAddProductFormValues] = useState({
+    productName: "",
+    productPrice: 0,
+    productDescription: "",
+    productId: "",
+  });
 
   const fetchProductsData = useCallback(async () => {
     let responseGet: any;
@@ -75,7 +84,57 @@ const HomeComponent = () => {
 
     fetchProductsData();
 
-    setOpenAddProductDialog(false);
+    setOpenAddProductDialog({ isOpen: false, isEdit: false });
+  }
+
+  async function updateProduct(event: any) {
+    event.preventDefault();
+
+    const productName = event.target.productName.value;
+    const productPrice = event.target.productPrice.value;
+    const productDescription = event.target.productDescription.value;
+
+    //post productdata
+    const responsePost = await fetch("/api/product", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productName,
+        productPrice,
+        productDescription,
+        productId: addProductFormValues.productId,
+        sellerEmail: allAuthData.authData.email,
+      }),
+    });
+
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
+
+    fetchProductsData();
+
+    setOpenAddProductDialog({ isOpen: false, isEdit: false });
+  }
+
+  async function deleteProduct(productId: any) {
+    //delete productdata
+    const responseDelete = await fetch("/api/product", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productId,
+      }),
+    });
+
+    //test response
+    const dataDelete = await responseDelete.json();
+    console.log(dataDelete);
+
+    fetchProductsData();
   }
 
   useEffect(() => {
@@ -97,7 +156,18 @@ const HomeComponent = () => {
             </div>
             <div className="w-full"></div>
             {userType !== UserType.Buyer && (
-              <Button onClick={() => setOpenAddProductDialog(true)}>
+              <Button
+                onClick={() => {
+                  setAddProductFormValues({
+                    productName: "",
+                    productPrice: 0,
+                    productDescription: "",
+                    productId: "",
+                  });
+
+                  setOpenAddProductDialog({ isOpen: true, isEdit: false });
+                }}
+              >
                 <FontAwesomeIcon className="px-5" icon={faPlus} size="2x" />
               </Button>
             )}
@@ -115,7 +185,7 @@ const HomeComponent = () => {
               {productsData.map((value) => (
                 <div key={value._id} className="w-1/4 p-2">
                   <Card>
-                    <div className="flex flex-col py-2 px-4">
+                    <div className="flex flex-col">
                       <div className="text-4xl font-semibold">
                         {value.productName}
                       </div>
@@ -124,12 +194,60 @@ const HomeComponent = () => {
                       <div className="lg text-slate-500">
                         {value.sellerEmail}
                       </div>
+                      {userType === UserType.Buyer ? (
+                        <div className="flex flex-col ">
+                          <div className="w-1/2">
+                            <input
+                              type="number"
+                              placeholder="Quantity"
+                              className="w-14 border-2"
+                            />
+                          </div>
+                          <div className="flex flex-row justify-evenly items-center">
+                            <Button onClick={(event) => {}}>
+                              <div className="bg-red-600 px-5 py-1 rounded-lg">
+                                Order Now
+                              </div>
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-row justify-evenly items-center">
+                          <Button
+                            onClick={(event) => {
+                              setAddProductFormValues({
+                                productName: value.productName,
+                                productPrice: value.productPrice,
+                                productDescription: value.productDescription,
+                                productId: value._id,
+                              });
+
+                              setOpenAddProductDialog({
+                                isOpen: true,
+                                isEdit: true,
+                              });
+                            }}
+                          >
+                            <div className="bg-red-600 px-5 py-1 rounded-lg">
+                              Update
+                            </div>
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              //value._id
+                              deleteProduct(value._id);
+                            }}
+                          >
+                            <div className="bg-red-600 px-5 py-1 rounded-lg">
+                              Delete
+                            </div>
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </Card>
                 </div>
-                // <div key={value._id}>{value.productName}</div>
               ))}
-              {/* {productsData[0] !== undefined && productsData[0].sellerEmail} */}
             </div>
           </div>
         </div>
@@ -165,8 +283,10 @@ const HomeComponent = () => {
 
       {/* Add Product Dialog */}
       <Dialog
-        open={openAddProductDialog}
-        onClose={() => setOpenAddProductDialog(false)}
+        open={openAddProductDialog.isOpen}
+        onClose={() =>
+          setOpenAddProductDialog({ isOpen: false, isEdit: false })
+        }
       >
         <div className="px-3">
           <DialogTitle>
@@ -174,12 +294,20 @@ const HomeComponent = () => {
           </DialogTitle>
 
           <DialogContent className="font-normal">
-            <form id="add-product-form" onSubmit={addProduct}>
+            <form
+              id="add-product-form"
+              onSubmit={(event) =>
+                openAddProductDialog.isEdit
+                  ? updateProduct(event)
+                  : addProduct(event)
+              }
+            >
               <div className="flex flex-col py-3">
                 <label className="text-sm py-1" htmlFor="productName">
                   Product Name
                 </label>
                 <input
+                  defaultValue={addProductFormValues.productName}
                   id="productName"
                   type="text"
                   placeholder="Type your product name"
@@ -191,6 +319,7 @@ const HomeComponent = () => {
                   Product Price
                 </label>
                 <input
+                  defaultValue={addProductFormValues.productPrice}
                   id="productPrice"
                   type="number"
                   placeholder="Type product price"
@@ -204,6 +333,7 @@ const HomeComponent = () => {
                   Product Description
                 </label>
                 <textarea
+                  defaultValue={addProductFormValues.productDescription}
                   id="productDescription"
                   name="text"
                   placeholder="Type product description"
@@ -223,7 +353,9 @@ const HomeComponent = () => {
               Save
             </Button>
             <Button
-              onClick={() => setOpenAddProductDialog(false)}
+              onClick={() =>
+                setOpenAddProductDialog({ isOpen: false, isEdit: false })
+              }
               color="primary"
               autoFocus
             >
