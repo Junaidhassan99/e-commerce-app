@@ -8,17 +8,84 @@ import {
 
 const AddAndEditDialogComponent: React.FC<{
   openAddProductDialog: any;
-  setOpenAddProductDialogFunction: any;
   addProductFormValues: any;
-  onSubmitFormFunction: any;
+  authEmail: String;
+  setOpenAddProductDialogFunction: any;
+  fetchProductsFunction: any;
   children?: React.ReactNode;
 }> = ({
   children,
   openAddProductDialog,
-  setOpenAddProductDialogFunction,
   addProductFormValues,
-  onSubmitFormFunction,
+  authEmail,
+  setOpenAddProductDialogFunction,
+  fetchProductsFunction,
 }) => {
+  async function addProduct(event: any) {
+    event.preventDefault();
+
+    console.log("add product submit");
+
+    const productName = event.target.productName.value;
+    const productPrice = event.target.productPrice.value;
+    const productDescription = event.target.productDescription.value;
+
+    console.log(productName);
+    console.log(productPrice);
+    console.log(productDescription);
+
+    //post productdata
+    const responsePost = await fetch("/api/product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productName,
+        productPrice,
+        productDescription,
+        sellerEmail: authEmail,
+      }),
+    });
+
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
+
+    fetchProductsFunction();
+    setOpenAddProductDialogFunction();
+  }
+
+  async function updateProduct(event: any) {
+    event.preventDefault();
+
+    const productName = event.target.productName.value;
+    const productPrice = event.target.productPrice.value;
+    const productDescription = event.target.productDescription.value;
+
+    //post productdata
+    const responsePost = await fetch("/api/product", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productName,
+        productPrice,
+        productDescription,
+        productId: addProductFormValues.productId,
+        sellerEmail: authEmail,
+      }),
+    });
+
+    //test response
+    const dataPost = await responsePost.json();
+    console.log(dataPost);
+
+    fetchProductsFunction();
+    setOpenAddProductDialogFunction();
+  }
+
   return (
     <Dialog
       open={openAddProductDialog.isOpen}
@@ -30,7 +97,14 @@ const AddAndEditDialogComponent: React.FC<{
         </DialogTitle>
 
         <DialogContent className="font-normal">
-          <form id="add-product-form" onSubmit={onSubmitFormFunction}>
+          <form
+            id="add-product-form"
+            onSubmit={(event: any) =>
+              openAddProductDialog.isEdit
+                ? updateProduct(event)
+                : addProduct(event)
+            }
+          >
             <div className="flex flex-col py-3">
               <label className="text-sm py-1" htmlFor="productName">
                 Product Name

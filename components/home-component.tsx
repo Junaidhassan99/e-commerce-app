@@ -23,6 +23,7 @@ import Card from "./card";
 import InfoDialogComponent from "./info-dialog-component";
 import OrderDetailDialogComponent from "./order-detail-dialog-component";
 import AddAndEditDialogComponent from "./add-and-edit-dialog-component";
+import ProductDataItemComponent from "./product-data-item-component";
 
 const HomeComponent = () => {
   const allAuthData = useSelector((state: any) => state.auth);
@@ -80,119 +81,6 @@ const HomeComponent = () => {
     }
   }, [allAuthData.authData.email]);
 
-  async function addProduct(event: any) {
-    event.preventDefault();
-
-    console.log("add product submit");
-
-    const productName = event.target.productName.value;
-    const productPrice = event.target.productPrice.value;
-    const productDescription = event.target.productDescription.value;
-
-    console.log(productName);
-    console.log(productPrice);
-    console.log(productDescription);
-
-    //post productdata
-    const responsePost = await fetch("/api/product", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productName,
-        productPrice,
-        productDescription,
-        sellerEmail: allAuthData.authData.email,
-      }),
-    });
-
-    //test response
-    const dataPost = await responsePost.json();
-    console.log(dataPost);
-
-    fetchProductsData();
-
-    setOpenAddProductDialog({ isOpen: false, isEdit: false });
-  }
-
-  async function updateProduct(event: any) {
-    event.preventDefault();
-
-    const productName = event.target.productName.value;
-    const productPrice = event.target.productPrice.value;
-    const productDescription = event.target.productDescription.value;
-
-    //post productdata
-    const responsePost = await fetch("/api/product", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productName,
-        productPrice,
-        productDescription,
-        productId: addProductFormValues.productId,
-        sellerEmail: allAuthData.authData.email,
-      }),
-    });
-
-    //test response
-    const dataPost = await responsePost.json();
-    console.log(dataPost);
-
-    fetchProductsData();
-
-    setOpenAddProductDialog({ isOpen: false, isEdit: false });
-  }
-
-  async function deleteProduct(productId: any) {
-    //delete productdata
-    const responseDelete = await fetch("/api/product", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productId,
-      }),
-    });
-
-    //test response
-    const dataDelete = await responseDelete.json();
-    console.log(dataDelete);
-
-    fetchProductsData();
-  }
-
-  async function orderProduct(
-    productName: any,
-    productPrice: any,
-    quantity: any,
-    sellerEmail: any,
-    buyerEmail: any
-  ) {
-    //order product data
-    const responsePost = await fetch("/api/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productName,
-        productPrice,
-        quantity,
-        sellerEmail,
-        buyerEmail,
-      }),
-    });
-
-    //test response
-    const dataPost = await responsePost.json();
-    console.log(dataPost);
-  }
-
   useEffect(() => {
     console.log("useEffect");
 
@@ -248,87 +136,28 @@ const HomeComponent = () => {
           <div className="pt-24 px-[10%]">
             <div className="flex flex-row flex-wrap">
               {productsData.map((value) => {
-                let productOrderQuanity = 0;
                 return (
                   <div key={value._id} className="w-1/4 p-2">
-                    <Card>
-                      <div className="flex flex-col">
-                        <div className="text-4xl font-semibold">
-                          {value.productName}
-                        </div>
-                        <div className="text-2xl">{`$${value.productPrice}`}</div>
-                        <div className="lg">{value.productDescription}</div>
-                        <div className="lg text-slate-500">
-                          {value.sellerEmail}
-                        </div>
-                        {userType === UserType.Buyer ? (
-                          <div className="flex flex-col ">
-                            <div className="w-1/2">
-                              <input
-                                defaultValue={0}
-                                type="number"
-                                placeholder="Quantity"
-                                className="w-14 border-2"
-                                onChange={(newVal) => {
-                                  productOrderQuanity = Number(
-                                    newVal.target.value
-                                  );
-                                }}
-                              />
-                            </div>
-                            <div className="flex flex-row justify-evenly items-center">
-                              <Button
-                                onClick={(event) => {
-                                  orderProduct(
-                                    value.productName,
-                                    value.productPrice,
-                                    productOrderQuanity,
-                                    value.sellerEmail,
-                                    allAuthData.authData.email
-                                  );
-                                }}
-                              >
-                                <div className="bg-red-600 px-5 py-1 rounded-lg">
-                                  Order Now
-                                </div>
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="flex flex-row justify-evenly items-center">
-                            <Button
-                              onClick={(event) => {
-                                setAddProductFormValues({
-                                  productName: value.productName,
-                                  productPrice: value.productPrice,
-                                  productDescription: value.productDescription,
-                                  productId: value._id,
-                                });
-
-                                setOpenAddProductDialog({
-                                  isOpen: true,
-                                  isEdit: true,
-                                });
-                              }}
-                            >
-                              <div className="bg-red-600 px-5 py-1 rounded-lg">
-                                Update
-                              </div>
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                //value._id
-                                deleteProduct(value._id);
-                              }}
-                            >
-                              <div className="bg-red-600 px-5 py-1 rounded-lg">
-                                Delete
-                              </div>
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </Card>
+                    <ProductDataItemComponent
+                      email={allAuthData.authData.email}
+                      userType={userType}
+                      value={value}
+                      setAddProductFormValuesFunction={() => {
+                        setAddProductFormValues({
+                          productName: value.productName,
+                          productPrice: value.productPrice,
+                          productDescription: value.productDescription,
+                          productId: value._id,
+                        });
+                      }}
+                      setOpenAddProductDialogFunction={() => {
+                        setOpenAddProductDialog({
+                          isOpen: true,
+                          isEdit: true,
+                        });
+                      }}
+                      fetchProductsFunction={fetchProductsData}
+                    />
                   </div>
                 );
               })}
@@ -358,9 +187,8 @@ const HomeComponent = () => {
       <AddAndEditDialogComponent
         openAddProductDialog={openAddProductDialog}
         addProductFormValues={addProductFormValues}
-        onSubmitFormFunction={(event: any) =>
-          openAddProductDialog.isEdit ? updateProduct(event) : addProduct(event)
-        }
+        authEmail={allAuthData.authData.email}
+        fetchProductsFunction={fetchProductsData}
         setOpenAddProductDialogFunction={() =>
           setOpenAddProductDialog({ isOpen: false, isEdit: false })
         }
