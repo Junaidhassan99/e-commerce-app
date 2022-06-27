@@ -91,6 +91,7 @@ const LogInComponent: React.FC<{
                   type="email"
                   placeholder="Type your email"
                   className="outline-0 border-b-2 w-60"
+                  required
                 ></input>
               </div>
               <div className="flex flex-col p-3">
@@ -103,9 +104,12 @@ const LogInComponent: React.FC<{
                   placeholder="Type your password"
                   className="outline-0 border-b-2 w-60"
                   minLength={8}
+                  required
                 ></input>
               </div>
-              <div className="text-center text-sm text-red-600">{errorText}</div>
+              <div className="text-center text-sm text-red-600">
+                {errorText}
+              </div>
             </form>
             <div className="p-3">
               <button

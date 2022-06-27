@@ -119,6 +119,7 @@ const AddAndEditDialogComponent: React.FC<{
                 className="outline-0 border-b-2 w-60"
                 minLength={3}
                 maxLength={15}
+                required
               ></input>
             </div>
             <div className="flex flex-col py-3">
@@ -133,6 +134,7 @@ const AddAndEditDialogComponent: React.FC<{
                 className="outline-0 border-b-2 w-60"
                 step=".01"
                 min={0}
+                required
               ></input>
             </div>
 
@@ -148,6 +150,7 @@ const AddAndEditDialogComponent: React.FC<{
                 className="outline-0 border-b-2 w-60"
                 minLength={5}
                 maxLength={50}
+                required
               ></textarea>
             </div>
           </form>

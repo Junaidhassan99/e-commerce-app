@@ -89,6 +89,7 @@ const SignUpComponent: React.FC<{
                   type="email"
                   placeholder="Type your email"
                   className="outline-0 border-b-2 w-60"
+                  required
                 ></input>
               </div>
               <div className="flex flex-col p-3">
@@ -101,6 +102,7 @@ const SignUpComponent: React.FC<{
                   placeholder="Type your password"
                   className="outline-0 border-b-2 w-60"
                   minLength={8}
+                  required
                 ></input>
               </div>
               <div className="flex flex-col p-3">
@@ -116,6 +118,7 @@ const SignUpComponent: React.FC<{
                   className="outline-0 border-b-2 w-60"
                   minLength={3}
                   maxLength={25}
+                  required
                 ></input>
               </div>
               <div className="flex flex-col p-3">
