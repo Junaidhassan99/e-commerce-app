@@ -96,6 +96,7 @@ const LogInComponent: React.FC<{
                   type="password"
                   placeholder="Type your password"
                   className="outline-0 border-b-2 w-60"
+                  minLength={8}
                 ></input>
               </div>
             </form>
