@@ -104,7 +104,7 @@ const LogInComponent: React.FC<{
                 type="submit"
                 form="login-form"
                 value="Submit"
-                className="primary-color py-1 px-24 rounded-lg text-slate-50 text-lg"
+                className="bg-red-600 py-1 px-24 rounded-lg text-slate-50 text-lg"
               >
                 Login
               </button>

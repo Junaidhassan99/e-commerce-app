@@ -93,7 +93,9 @@ const AddAndEditDialogComponent: React.FC<{
     >
       <div className="px-3">
         <DialogTitle>
-          <div className="font-bold">{"Add Product"}</div>
+          <div className="font-bold">
+            {!openAddProductDialog.isEdit ? "Add Product" : "Edit Product"}
+          </div>
         </DialogTitle>
 
         <DialogContent className="font-normal">
@@ -115,6 +117,8 @@ const AddAndEditDialogComponent: React.FC<{
                 type="text"
                 placeholder="Type your product name"
                 className="outline-0 border-b-2 w-60"
+                minLength={3}
+                maxLength={15}
               ></input>
             </div>
             <div className="flex flex-col py-3">
@@ -128,6 +132,7 @@ const AddAndEditDialogComponent: React.FC<{
                 placeholder="Type product price"
                 className="outline-0 border-b-2 w-60"
                 step=".01"
+                min={0}
               ></input>
             </div>
 
@@ -141,6 +146,8 @@ const AddAndEditDialogComponent: React.FC<{
                 name="text"
                 placeholder="Type product description"
                 className="outline-0 border-b-2 w-60"
+                minLength={5}
+                maxLength={50}
               ></textarea>
             </div>
           </form>

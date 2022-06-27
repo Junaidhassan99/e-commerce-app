@@ -134,7 +134,7 @@ const SignUpComponent: React.FC<{
                 type="submit"
                 form="signup-form"
                 value="Submit"
-                className="primary-color py-1 px-24 rounded-lg text-slate-50 text-lg"
+                className="bg-red-600 py-1 px-24 rounded-lg text-slate-50 text-lg"
               >
                 Signup
               </button>
