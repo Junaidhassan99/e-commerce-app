@@ -67,7 +67,7 @@ const SignUpComponent: React.FC<{
 
       setErrorText("");
     } catch (error) {
-      setErrorText("Invalid field detected");
+      setErrorText("Email Already Exists");
     }
   }
 
