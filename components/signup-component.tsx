@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { useState } from "react";
 import { UserType } from "../utilities/enum";
 import Card from "./card";
 
 const SignUpComponent: React.FC<{
   userType: UserType;
 }> = ({ userType }) => {
+  const [errorText, setErrorText] = useState("");
+
   async function signupSubmitHandler(event: any) {
     event.preventDefault();
 
@@ -48,18 +51,24 @@ const SignUpComponent: React.FC<{
       };
     }
 
-    //post signup data
-    const responsePost = await fetch("/api/auth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signupData),
-    });
+    try {
+      //post signup data
+      const responsePost = await fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      });
 
-    //test response
-    const dataPost = await responsePost.json();
-    console.log(dataPost);
+      //test response
+      const dataPost = await responsePost.json();
+      console.log(dataPost);
+
+      setErrorText("");
+    } catch (error) {
+      setErrorText("Invalid field detected");
+    }
   }
 
   return (
@@ -131,6 +140,9 @@ const SignUpComponent: React.FC<{
                   placeholder="Type your mobile"
                   className="outline-0 border-b-2 w-60"
                 ></input>
+              </div>
+              <div className="text-center text-sm text-red-600">
+                {errorText}
               </div>
             </form>
             <div className="p-3">

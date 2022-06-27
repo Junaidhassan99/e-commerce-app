@@ -6,6 +6,7 @@ import Card from "./card";
 import { useSelector, useDispatch } from "react-redux";
 import { setAllAuthData } from "../store/auth-slice";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const LogInComponent: React.FC<{
   userType: UserType;
@@ -15,6 +16,8 @@ const LogInComponent: React.FC<{
   const allAuthData = useSelector((state: any) => state.auth);
 
   const router = useRouter();
+
+  const [errorText, setErrorText] = useState("");
 
   console.log(
     "🚀 ~ file: login-component.tsx ~ line 16 ~ allAuthData",
@@ -54,6 +57,8 @@ const LogInComponent: React.FC<{
     if (dataGet !== null && password === dataGet.password) {
       console.log("Correct Email and Password");
 
+      setErrorText("");
+
       //store auth data to state
       dispatch(setAllAuthData({ userType: userType, authData: dataGet }));
 
@@ -64,6 +69,7 @@ const LogInComponent: React.FC<{
       }
     } else {
       console.log("Incorrect Email or Password");
+      setErrorText("Incorrect Email or Password");
     }
   }
 
@@ -99,6 +105,7 @@ const LogInComponent: React.FC<{
                   minLength={8}
                 ></input>
               </div>
+              <div className="text-center text-sm text-red-600">{errorText}</div>
             </form>
             <div className="p-3">
               <button
